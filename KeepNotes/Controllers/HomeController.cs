@@ -12,6 +12,7 @@ namespace KeepNotes.Controllers
     {
         private readonly IUserRepository _userRepository;
         private static Users currUser;
+        private static bool isLogout=false;
         public HomeController(IUserRepository userRepository)
         {
             _userRepository = userRepository;
@@ -31,64 +32,78 @@ namespace KeepNotes.Controllers
         [HttpPost]
         public IActionResult Login(Users user)
         {
-            if (ModelState.GetFieldValidationState("Email") == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid)
+            if (!isLogout)
             {
-                if (user.Email != null && user.Password != null)
+                if (ModelState.GetFieldValidationState("Email") == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid)
                 {
-                    Users validateuser = _userRepository.GetUserEmailPassword(user.Email,user.Password);
-                    if (validateuser != null)
+                    if (user.Email != null && user.Password != null)
                     {
-                        ViewBag.User = validateuser;
-                        currUser = validateuser;
-                        return RedirectToAction("Home");
-                    }
-                    else
-                    {
-                        ViewData["InvalidUser"] = "Invalid Email Address or Password";
+                        Users validateuser = _userRepository.GetUserEmailPassword(user.Email, user.Password);
+                        if (validateuser != null)
+                        {
+                            ViewBag.User = validateuser;
+                            currUser = validateuser;
+                            return RedirectToAction("Home");
+                        }
+                        else
+                        {
+                            ViewData["InvalidUser"] = "Invalid Email Address or Password";
 
+                        }
+                    }
+                    else if (user.Email != null)
+                    {
+                        Users validateuser = _userRepository.GetUserOnlyEmail(user.Email);
+                        if (validateuser != null)
+                        {
+                            ViewBag.User = validateuser;
+                            currUser = validateuser;
+                            return RedirectToAction("Home");
+                        }
+                        else
+                        {
+                            ViewData["InvalidUser"] = "Invalid Email Address";
+
+                        }
                     }
                 }
-                else if (user.Email != null)
-                {
-                    Users validateuser = _userRepository.GetUserOnlyEmail(user.Email);
-                    if (validateuser != null)
-                    {
-                        ViewBag.User = validateuser;
-                        currUser = validateuser;
-                        return RedirectToAction("Home");
-                    }
-                    else
-                    {
-                        ViewData["InvalidUser"] = "Invalid Email Address";
-
-                    }
-                }
+                return View();
             }
-            return View();
+            return RedirectToAction("Index");
         }
+
+
         [HttpGet]
         public IActionResult UpdateProfile()
         {
-            Users newuser = _userRepository.GetUserFromId(currUser.Id);
-            ViewBag.User = currUser;
-            return View(newuser);
+            if (!isLogout)
+            {
+                Users newuser = _userRepository.GetUserFromId(currUser.Id);
+                ViewBag.User = currUser;
+                return View(newuser);
+            }
+            return RedirectToAction("Index");
         }
         [HttpPost]
         public IActionResult UpdateProfile(Users user)
         {
-            if (ModelState.GetFieldValidationState("Username") == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid
-                && ModelState.GetFieldValidationState("Email") == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid
-                && ModelState.GetFieldValidationState("Contact") == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid)
+            if (!isLogout)
             {
-                Users newuser = _userRepository.GetUserFromId(currUser.Id);
-                newuser.Username = user.Username;
-                newuser.Email= user.Email;
-                newuser.Contact= user.Contact;
-                Users updateduser = _userRepository.Update(newuser);
+                if (ModelState.GetFieldValidationState("Username") == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid
+                    && ModelState.GetFieldValidationState("Email") == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid
+                    && ModelState.GetFieldValidationState("Contact") == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid)
+                {
+                    Users newuser = _userRepository.GetUserFromId(currUser.Id);
+                    newuser.Username = user.Username;
+                    newuser.Email = user.Email;
+                    newuser.Contact = user.Contact;
+                    Users updateduser = _userRepository.Update(newuser);
 
-                return RedirectToAction("Home");
+                    return RedirectToAction("Home");
+                }
+                return View();
             }
-            return View();
+            return RedirectToAction("Index");
         }
         [HttpGet]
         public IActionResult Signup()
@@ -107,11 +122,21 @@ namespace KeepNotes.Controllers
             return View();
         }
         [HttpGet]
-        public ViewResult Home()
+        public IActionResult Home()
         {
-            Users newuser = _userRepository.GetUserFromId(currUser.Id);
-            ViewBag.User = newuser;
-            return View();
+            if (!isLogout)
+            {
+                Users newuser = _userRepository.GetUserFromId(currUser.Id);
+                ViewBag.User = newuser;
+                return View();
+            }
+            return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            isLogout = true;
+            return RedirectToAction("Index");
         }
     }
 }
