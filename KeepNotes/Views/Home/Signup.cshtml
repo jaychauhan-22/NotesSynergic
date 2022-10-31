@@ -1,0 +1,37 @@
+﻿@model KeepNotes.Models.Users
+@{
+    ViewData["Title"] = "Keep Notes | Signup";
+}
+<body>
+    
+    <main>
+        <div class="col-auto my-4">
+            <form asp-action="Signup" class="col-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Username" class="control-label">Enter New Username</label>
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label">Enter New Email</label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                    <label asp-for="Contact" class="control-label">Enter Your Contact Number</label>
+                    <input asp-for="Contact" class="form-control" />
+                    <span asp-validation-for="Contact" class="text-danger"></span>
+            </div>
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label">Enter Secure Password</label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+            <div class="form-group">
+                <input type="submit" value="Create Account" class="btn btn-primary" />
+            </div>
+            </form>
+        </div>
+    </main>
+</body>

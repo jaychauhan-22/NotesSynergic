@@ -1,0 +1,24 @@
+﻿@using KeepNotes.Models;
+@{
+    ViewData["Title"] = "Keep Notes | Home";
+}
+<center><h1>All Notes</h1></center>
+<div class="container-fluid">
+    
+    <div class="card border-primary" style="width: 18rem;">
+        <div class="card-header">
+            Card Header
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Card Title</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Card Subtitle</h6>
+            <p class="card-text">Some Quick Text</p>
+        </div>
+    </div>
+    @{
+        var user = ViewBag.User;
+        var d = ViewBag.Dummy;
+    }
+    <div>
+    </div>
+</div>
