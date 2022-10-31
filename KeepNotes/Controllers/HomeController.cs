@@ -11,6 +11,7 @@ namespace KeepNotes.Controllers
     public class HomeController : Controller
     {
         private readonly IUserRepository _userRepository;
+        private static Users currUser;
         public HomeController(IUserRepository userRepository)
         {
             _userRepository = userRepository;
@@ -38,7 +39,7 @@ namespace KeepNotes.Controllers
                     if (validateuser != null)
                     {
                         ViewBag.User = validateuser;
-                        TempData["User"] = validateuser.Id.ToString();
+                        currUser = validateuser;
                         return RedirectToAction("Home");
                     }
                     else
@@ -53,7 +54,7 @@ namespace KeepNotes.Controllers
                     if (validateuser != null)
                     {
                         ViewBag.User = validateuser;
-                        TempData["User"] = validateuser.Id.ToString();
+                        currUser = validateuser;
                         return RedirectToAction("Home");
                     }
                     else
@@ -62,6 +63,30 @@ namespace KeepNotes.Controllers
 
                     }
                 }
+            }
+            return View();
+        }
+        [HttpGet]
+        public IActionResult UpdateProfile()
+        {
+            Users newuser = _userRepository.GetUserFromId(currUser.Id);
+            ViewBag.User = currUser;
+            return View(newuser);
+        }
+        [HttpPost]
+        public IActionResult UpdateProfile(Users user)
+        {
+            if (ModelState.GetFieldValidationState("Username") == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid
+                && ModelState.GetFieldValidationState("Email") == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid
+                && ModelState.GetFieldValidationState("Contact") == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid)
+            {
+                Users newuser = _userRepository.GetUserFromId(currUser.Id);
+                newuser.Username = user.Username;
+                newuser.Email= user.Email;
+                newuser.Contact= user.Contact;
+                Users updateduser = _userRepository.Update(newuser);
+
+                return RedirectToAction("Home");
             }
             return View();
         }
@@ -76,6 +101,7 @@ namespace KeepNotes.Controllers
             if (ModelState.IsValid)
             {
                 Users newuser = _userRepository.Add(user);
+                currUser = newuser;
                 return RedirectToAction("Home");
             }
             return View();
@@ -83,9 +109,7 @@ namespace KeepNotes.Controllers
         [HttpGet]
         public ViewResult Home()
         {
-            String Id = TempData["User"] as String;
-            int id = Int32.Parse(Id);
-            Users newuser = _userRepository.GetUserFromId(id);
+            Users newuser = _userRepository.GetUserFromId(currUser.Id);
             ViewBag.User = newuser;
             return View();
         }

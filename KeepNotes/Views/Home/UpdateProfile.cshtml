@@ -1,0 +1,56 @@
+﻿@model KeepNotes.Models.Users
+@{
+    ViewData["Title"] = "Keep Notes | Update Profile";
+    var user = ViewBag.User;
+}
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <img src="/assest/img/logo.png" alt="Logo" height="45px">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                    <li class="nav-item active mx-2">
+                        <a class="nav-link" asp-action="Index">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item text-light">
+                        <a class="nav-link">Welcome @user.Username</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="UpdateProfile">Update Profile</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="col-auto my-4">
+            <form asp-action="UpdateProfile" class="col-4">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Username" class="control-label">Update Username</label>
+                    <input asp-for="Username" class="form-control" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label">Update Email</label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Contact" class="control-label">Update Contact Number</label>
+                    <input asp-for="Contact" class="form-control" />
+                    <span asp-validation-for="Contact" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create Account" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </main>
+</body>
