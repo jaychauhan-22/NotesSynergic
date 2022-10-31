@@ -1,0 +1,32 @@
+﻿@model IEnumerable<KeepNotes.Models.Category>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table container">
+    <thead>
+        <tr>
+            <th>
+                Categories
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in ViewBag.categories) {
+        <tr>
+            <td>
+                @item.Name
+            </td>
+            <td>
+                <a asp-action="Edit"  asp-route-id="@item.CategoryId">Edit</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

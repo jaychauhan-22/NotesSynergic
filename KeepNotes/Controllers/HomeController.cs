@@ -11,6 +11,7 @@ namespace KeepNotes.Controllers
     public class HomeController : Controller
     {
         private readonly IUserRepository _userRepository;
+        public static Users currUser;
         public HomeController(IUserRepository userRepository)
         {
             _userRepository = userRepository;
@@ -39,6 +40,7 @@ namespace KeepNotes.Controllers
                     {
                         ViewBag.User = validateuser;
                         TempData["User"] = validateuser.Id.ToString();
+                        currUser = validateuser;
                         return RedirectToAction("Home");
                     }
                     else
@@ -54,6 +56,7 @@ namespace KeepNotes.Controllers
                     {
                         ViewBag.User = validateuser;
                         TempData["User"] = validateuser.Id.ToString();
+                        currUser = validateuser;
                         return RedirectToAction("Home");
                     }
                     else
@@ -76,6 +79,7 @@ namespace KeepNotes.Controllers
             if (ModelState.IsValid)
             {
                 Users newuser = _userRepository.Add(user);
+                currUser = newuser;
                 return RedirectToAction("Home");
             }
             return View();
@@ -83,9 +87,9 @@ namespace KeepNotes.Controllers
         [HttpGet]
         public ViewResult Home()
         {
-            String Id = TempData["User"] as String;
-            int id = Int32.Parse(Id);
-            Users newuser = _userRepository.GetUserFromId(id);
+            //String Id = TempData["User"] as String;
+            //int id = Int32.Parse(Id);
+            Users newuser = _userRepository.GetUserFromId(currUser.Id);
             ViewBag.User = newuser;
             return View();
         }

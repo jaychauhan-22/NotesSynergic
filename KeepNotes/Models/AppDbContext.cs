@@ -14,5 +14,6 @@ namespace CollegeApp.Modals
         {
         }
         public DbSet<Users> Users{ get; set; }
+        public DbSet<Category> Category { get; set; }
     }
 }

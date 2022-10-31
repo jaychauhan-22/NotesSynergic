@@ -8,6 +8,7 @@ namespace KeepNotes.Models
     {
         public int CategoryId { get; set; }
 
+        public int UserId { get; set; }
         public Users User { get; set; }
 
         [Required]
