@@ -38,7 +38,8 @@ namespace KeepNotes.Controllers
                     if (validateuser != null)
                     {
                         ViewBag.User = validateuser;
-                        return RedirectToAction("Home",ViewBag.User);
+                        TempData["User"] = validateuser.Id.ToString();
+                        return RedirectToAction("Home");
                     }
                     else
                     {
@@ -52,8 +53,8 @@ namespace KeepNotes.Controllers
                     if (validateuser != null)
                     {
                         ViewBag.User = validateuser;
-                        ViewBag.Dummy = "Hello";
-                        return RedirectToAction("Home",ViewBag.user);
+                        TempData["User"] = validateuser.Id.ToString();
+                        return RedirectToAction("Home");
                     }
                     else
                     {
@@ -75,13 +76,17 @@ namespace KeepNotes.Controllers
             if (ModelState.IsValid)
             {
                 Users newuser = _userRepository.Add(user);
-                return RedirectToAction("Home", new { id = newuser.Id });
+                return RedirectToAction("Home");
             }
             return View();
         }
         [HttpGet]
-        public IActionResult Home()
+        public ViewResult Home()
         {
+            String Id = TempData["User"] as String;
+            int id = Int32.Parse(Id);
+            Users newuser = _userRepository.GetUserFromId(id);
+            ViewBag.User = newuser;
             return View();
         }
     }

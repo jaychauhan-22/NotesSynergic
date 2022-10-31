@@ -39,6 +39,10 @@ namespace KeepNotes.Models
         {
             return context.Users.FirstOrDefault(m=>m.Email == email );
         }
+        public Users GetUserFromId(int Id)
+        {
+            return context.Users.FirstOrDefault(m => m.Id == Id);
+        }
         public Users GetUserEmailPassword(string email,string password)
         {
             return context.Users.FirstOrDefault(m => m.Email == email && m.Password == password);
