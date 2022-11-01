@@ -1,0 +1,55 @@
+﻿@model IEnumerable<KeepNotes.Models.Note>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Text)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in ViewBag.notes) {
+        <tr>
+            <td>
+               @item.Title
+            </td>
+            <td>
+               @item.Text
+            </td>
+            <td>
+                @{ 
+                    var catName = "";
+                }
+                @foreach (var itemcat in ViewBag.categories)
+                { 
+                  if(itemcat.CategoryId == item.CategoryId)
+                    {
+                        catName = itemcat.Name;
+                    } 
+                }
+                @catName
+                </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.NoteId">Edit</a> 
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

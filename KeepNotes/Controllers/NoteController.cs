@@ -8,17 +8,21 @@ using System.Security.Principal;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using KeepNotes.Controllers;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using CollegeApp.Modals;
 
 namespace KeepNotes.Controllers
 {
     public class NoteController : Controller
     {
         private readonly INoteRepository _noteRepository;
+        private readonly ICategoryRepository _categoryRepository;
         private static Note currSelectedNote;
 
-        public NoteController(INoteRepository noteRepository)
+        public NoteController(INoteRepository noteRepository, ICategoryRepository categoryRepository)
         {
             _noteRepository = noteRepository;
+            _categoryRepository = categoryRepository;
         }
 
         [HttpGet]
@@ -26,12 +30,17 @@ namespace KeepNotes.Controllers
         {
             IEnumerable<Note> notes = _noteRepository.GetAllNotes(HomeController.currUser.Id);
             ViewBag.notes = notes;
+            IEnumerable<Category> categories = _categoryRepository.GetAllCategories(HomeController.currUser.Id);
+            ViewBag.categories = categories;
             return View();
         }
 
         [HttpGet]
         public IActionResult Create()
         {
+            IEnumerable<Category> categories = _categoryRepository.GetAllCategories(HomeController.currUser.Id);
+            ViewBag.categories = categories;
+            ViewData["CategoryId"] = new SelectList(categories, "CategoryId", "Name");
             return View();
         }
         [HttpPost]
@@ -39,10 +48,9 @@ namespace KeepNotes.Controllers
         {
             if (ModelState.IsValid)
             {            
-                    note.UserId = HomeController.currUser.Id;
-                    Note newNote = _noteRepository.Add(note);
-                    //currUser = newuser;
-                    return RedirectToAction("Index");
+                note.UserId = HomeController.currUser.Id;
+                Note newNote = _noteRepository.Add(note);
+                return RedirectToAction("Index");
             }
             return View();
         }
@@ -53,6 +61,9 @@ namespace KeepNotes.Controllers
             Note note = _noteRepository.GetNote(id);
             ViewBag.note = note;
             currSelectedNote = note;
+            IEnumerable<Category> categories = _categoryRepository.GetAllCategories(HomeController.currUser.Id);
+            ViewBag.categories = categories;
+            ViewData["CategoryId"] = new SelectList(categories, "CategoryId", "Name",note.CategoryId);
             return View(note);
         }
         [HttpPost]
