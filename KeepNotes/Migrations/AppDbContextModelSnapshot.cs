@@ -73,6 +73,30 @@ namespace KeepNotes.Migrations
                     b.ToTable("Note");
                 });
 
+            modelBuilder.Entity("KeepNotes.Models.Share", b =>
+                {
+                    b.Property<int?>("NoteId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ToShareUserId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isWritable")
+                        .HasColumnType("bit");
+
+                    b.HasIndex("NoteId");
+
+                    b.HasIndex("ToShareUserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Share");
+                });
+
             modelBuilder.Entity("KeepNotes.Models.Users", b =>
                 {
                     b.Property<int>("Id")
@@ -115,6 +139,23 @@ namespace KeepNotes.Migrations
                     b.HasOne("KeepNotes.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId");
+
+                    b.HasOne("KeepNotes.Models.Users", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("KeepNotes.Models.Share", b =>
+                {
+                    b.HasOne("KeepNotes.Models.Note", "Note")
+                        .WithMany()
+                        .HasForeignKey("NoteId");
+
+                    b.HasOne("KeepNotes.Models.Users", "ToShareUser")
+                        .WithMany()
+                        .HasForeignKey("ToShareUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("KeepNotes.Models.Users", "User")
                         .WithMany()

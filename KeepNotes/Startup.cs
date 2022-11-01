@@ -31,6 +31,7 @@ namespace KeepNotes
             services.AddScoped<IUserRepository,SQLUserRepository>();
             services.AddScoped<ICategoryRepository, SQLCategoryRepository>();
             services.AddScoped<INoteRepository, SQLNoteRepository>();
+            services.AddScoped<IShareRepository, SQLShareRepository>();
             services.AddRazorPages();
         }
 

@@ -17,6 +17,7 @@ namespace KeepNotes.Controllers
     {
         private readonly INoteRepository _noteRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IShareRepository _shareRepository;
         private static Note currSelectedNote;
 
         public NoteController(INoteRepository noteRepository, ICategoryRepository categoryRepository)

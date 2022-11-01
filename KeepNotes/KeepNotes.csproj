@@ -13,6 +13,8 @@
     <Compile Remove="Migrations\20221031200830_UserSetNullNote.Designer.cs" />
     <Compile Remove="Migrations\20221031201020_UserSetNullNote1.cs" />
     <Compile Remove="Migrations\20221031201020_UserSetNullNote1.Designer.cs" />
+    <Compile Remove="Migrations\20221101024740_share.cs" />
+    <Compile Remove="Migrations\20221101024740_share.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

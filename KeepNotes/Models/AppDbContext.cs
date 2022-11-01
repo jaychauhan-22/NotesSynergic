@@ -29,10 +29,14 @@ namespace CollegeApp.Modals
             //    .HasForeignKey(c => c.UserId)
             //    .OnDelete(DeleteBehavior.ClientSetNull);
 
+            modelBuilder.Entity<Share>()
+                .HasNoKey();
         }
 
         public DbSet<Users> Users{ get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<Note> Note { get; set; }
+
+        public DbSet<Share> Share { get; set; }
     }
 }
