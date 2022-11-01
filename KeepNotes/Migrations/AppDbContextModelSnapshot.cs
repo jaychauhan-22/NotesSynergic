@@ -78,6 +78,9 @@ namespace KeepNotes.Migrations
                     b.Property<int?>("NoteId")
                         .HasColumnType("int");
 
+                    b.Property<int>("ShareId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("ToShareUserId")
                         .IsRequired()
                         .HasColumnType("int");

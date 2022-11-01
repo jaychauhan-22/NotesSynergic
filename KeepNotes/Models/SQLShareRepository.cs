@@ -1,6 +1,8 @@
 ﻿using CollegeApp.Modals;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace KeepNotes.Models
 {
@@ -12,11 +14,27 @@ namespace KeepNotes.Models
             this.context = context;
         }
 
-        public Share Add(Share share)
+        public void Add(string share)
         {
-            context.Share.Add(share);
-            context.SaveChanges();
-            return share;
+            //share.NoteId = 1;
+            //share.UserId = 1;
+            ////share.ShareId = 1;
+            //share.ToShareUserId = 3;
+            //share.isWritable = true;
+
+            //context.Share.FromSqlRaw()
+            //context.Share.Add(share);
+            //int isWritable = 0;
+            //if (share.isWritable)
+            //{
+            //    isWritable = 1;
+            //}
+            context.Database.ExecuteSqlRaw(share);
+            //Share newShare = null;
+            //context.Share.FromSqlRaw(share).AsEnumerable();
+
+            //context.SaveChanges();
+            //return newShare;
         }
 
         public void Delete(int nid,int uid)

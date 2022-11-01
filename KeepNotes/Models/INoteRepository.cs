@@ -10,6 +10,5 @@ namespace KeepNotes.Models
         Note Add(Note note);
         Note Update(Note note);
         Note Delete(int Id);
-
     }
 }

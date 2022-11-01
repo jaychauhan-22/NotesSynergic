@@ -12,10 +12,10 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
+
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
+                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
@@ -32,6 +32,18 @@
                     <input class="form-check-input" asp-for="isPublic" /> @Html.DisplayNameFor(model => model.isPublic)
                 </label>
             </div>
+
+            <div class="form-group">
+                <label asp-for="ShareMails" class="control-label"></label>
+                <input asp-for="ShareMails" class="form-control" />
+                <span asp-validation-for="ShareMails" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="isWritable" /> @Html.DisplayNameFor(model => model.isWritable)
+                </label>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

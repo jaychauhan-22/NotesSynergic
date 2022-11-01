@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KeepNotes.Models
 {
@@ -17,5 +18,11 @@ namespace KeepNotes.Models
         public string Text { get; set; }
         [Required]
         public bool isPublic { get; set; }
+
+        [NotMapped]
+        public bool isWritable { get; set; }
+
+        [NotMapped]
+        public string ShareMails { get; set; }
     }
 }

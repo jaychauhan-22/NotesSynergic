@@ -4,6 +4,7 @@ namespace KeepNotes.Models
 {
     public class Share
     {
+        public int ShareId { get; set; }
         public int? UserId { get; set; }
         public Users User { get; set; }
 
