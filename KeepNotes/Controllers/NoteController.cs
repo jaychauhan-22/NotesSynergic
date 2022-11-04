@@ -228,6 +228,47 @@ namespace KeepNotes.Controllers
         }
 
         [HttpGet]
+        public IActionResult SharedEdit(int id)
+        {
+            Note note = _noteRepository.GetNote(id);
+
+            ViewBag.note = note;
+            currSelectedNote = note;
+            IEnumerable<Category> categories = _categoryRepository.GetAllCategories(HomeController.currUser.Id);
+            ViewBag.categories = categories;
+            ViewData["CategoryId"] = new SelectList(categories, "CategoryId", "Name", note.CategoryId);
+            int userid = Int32.Parse(note.UserId.ToString());
+            IEnumerable<Share> share = _shareRepository.GetAllShares(id, userid);
+            List<string> sharedusername = new List<string>();
+            List<int> shareduserid = new List<int>();
+            foreach (var shareid in share)
+            {
+                Users user = _userRepository.GetUserFromId(Int32.Parse(shareid.ToShareUserId.ToString()));
+                sharedusername.Add(user.Username);
+                shareduserid.Add(user.Id);
+            }
+            ViewBag.shareusers = sharedusername;
+            ViewBag.shareuserid = shareduserid;
+            ViewBag.share = share;
+            return View(note);
+        }
+        [HttpPost]
+        public IActionResult SharedEdit(Note note, string[] shareduserid, string sharenote)
+        {
+            if (ModelState.IsValid)
+            {
+                note.UserId = currSelectedNote.UserId;
+                note.NoteId = currSelectedNote.NoteId;
+                Note oldnote = _noteRepository.GetNote(note.NoteId);
+                oldnote.Title = note.Title;
+                oldnote.Text = note.Text;
+                Note newnote = _noteRepository.Update(oldnote);
+                return RedirectToAction("SharedNotes");
+            }
+
+            return View();
+        }
+        [HttpGet]
         public IActionResult Delete(int id)
         {
             Note note = _noteRepository.Delete(id);
