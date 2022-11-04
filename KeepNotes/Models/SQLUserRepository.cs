@@ -49,8 +49,9 @@ namespace KeepNotes.Models
         }
         public Users Update(Users user)
         {
-            var student = context.Users.Attach(user);
-            //user.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            var updateduser = context.Users.Attach(user);
+            updateduser.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            context.SaveChanges();
             return user;
         }
     }

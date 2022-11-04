@@ -1,9 +1,8 @@
-﻿@model KeepNotes.Models.Users;
+﻿@model KeepNotes.Models.Users
 @{
-    ViewData["Title"] = "Keep Notes | Login";
+    ViewData["Title"] = "Keep Notes | Update Profile";
+    var user = ViewBag.User;
 }
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -19,11 +18,14 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" asp-action="Login">Login</a>
+                    <li class="nav-item text-light">
+                        <a class="nav-link">Welcome @user.Username</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-action="Signup">Signup</a>
+                        <a class="nav-link" asp-action="UpdateProfile">Update Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="Logout">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -31,28 +33,27 @@
     </header>
     <main>
         <div class="col-auto my-4">
-            <form asp-action="Login" class="col-4">
+            <form asp-action="UpdateProfile" class="col-4">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="Email" class="control-label">Enter Valid Email</label>
+                    <label asp-for="Username" class="control-label">Update Username</label>
+                    <input asp-for="Username" class="form-control" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label">Update Email</label>
                     <input asp-for="Email" class="form-control" />
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Password" class="control-label">Enter Valid Password</label>
-                    <input asp-for="Password" class="form-control" />
+                    <label asp-for="Contact" class="control-label">Update Contact Number</label>
+                    <input asp-for="Contact" class="form-control" />
+                    <span asp-validation-for="Contact" class="text-danger"></span>
                 </div>
-                @{
-                    var printdata = ViewData["InvalidUser"];
-                }
                 <div class="form-group">
-                    <label class="text-danger">@printdata</label>
-                    <br />
-                    <input type="submit" value="Login" class="btn btn-primary" />
+                    <input type="submit" value="Create Account" class="btn btn-primary" />
                 </div>
             </form>
         </div>
     </main>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
 </body>
