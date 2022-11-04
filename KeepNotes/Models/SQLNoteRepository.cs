@@ -34,7 +34,10 @@ namespace KeepNotes.Models
         {
             return context.Note.Where(c => c.UserId == uid).ToList();
         }
-
+        public IEnumerable<Note> GetPublicNotes(int uid)
+        {
+            return context.Note.Where(c => c.UserId == uid && c.isPublic == true).ToList();
+        }
         public Note GetNote(int id)
         {
             return context.Note.FirstOrDefault(m => m.NoteId == id);

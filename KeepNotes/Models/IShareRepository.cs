@@ -7,8 +7,10 @@ namespace KeepNotes.Models
     public interface IShareRepository
     {
         IEnumerable<Share> GetAllShares(int noteId,int uid);
+        IEnumerable<Share> CheckShareIdExists(int noteId, int uid,int suid);
         void Add(string share);
-        void Delete(int nid,int uid);
+        void Delete(string query);
+
 
     }
 }

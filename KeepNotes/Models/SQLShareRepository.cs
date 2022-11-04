@@ -37,19 +37,24 @@ namespace KeepNotes.Models
             //return newShare;
         }
 
-        public void Delete(int nid,int uid)
+        public void Delete(string query)
         {
-            Share Share = context.Share.Where(s => s.UserId == uid && s.NoteId == nid).FirstOrDefault();
+            /*Share Share = context.Share.Where(s => s.UserId == uid && s.NoteId == nid && s.ToShareUserId == sid).FirstOrDefault();
             if (Share != null)
             {
                 context.Share.Remove(Share);
                 context.SaveChanges();
-            }
+            }*/
+            context.Database.ExecuteSqlRaw(query);
         }
 
         public IEnumerable<Share> GetAllShares(int noteId,int uid)
         {
             return context.Share.Where(s => s.UserId == uid && s.NoteId == noteId).ToList();
+        }
+        public IEnumerable<Share> CheckShareIdExists(int noteId, int uid,int suid)
+        {
+            return context.Share.Where(s => s.UserId == uid && s.NoteId == noteId && s.ToShareUserId==suid).ToList();
         }
     }
 }

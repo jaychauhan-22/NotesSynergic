@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 
@@ -11,23 +12,27 @@ namespace KeepNotes.Controllers
     public class HomeController : Controller
     {
         private readonly IUserRepository _userRepository;
+        private readonly INoteRepository _noteRepository;
         public static Users currUser;
 
         private static bool isLogout=false;
-        public HomeController(IUserRepository userRepository)
+        private static bool ispublic = false;
+        public HomeController(IUserRepository userRepository,INoteRepository noteRepository)
         {
             _userRepository = userRepository;
+            _noteRepository = noteRepository;
         }
 
         public IActionResult Index()
         {
-
             return View();
         }
         [HttpGet]
         public IActionResult Login()
         {
 
+            isLogout = false;
+            ispublic = false;
             return View();
         }
         [HttpPost]
@@ -44,6 +49,7 @@ namespace KeepNotes.Controllers
                         {
                             ViewBag.User = validateuser;
                             currUser = validateuser;
+                            ispublic=true;
                             return RedirectToAction("Home");
                         }
                         else
@@ -109,6 +115,7 @@ namespace KeepNotes.Controllers
         [HttpGet]
         public IActionResult Signup()
         {
+            isLogout = false;
             return View();
         }
         [HttpPost]
@@ -127,6 +134,16 @@ namespace KeepNotes.Controllers
         {
             if (!isLogout)
             {
+                if(ispublic==true)
+                {
+                    IEnumerable<Note> notes  = _noteRepository.GetPublicNotes(currUser.Id);
+                    ViewBag.Notes = notes;
+                }
+                else
+                {
+                    IEnumerable<Note> notes = _noteRepository.GetAllNotes(currUser.Id);
+                    ViewBag.Notes = notes;
+                }
                 Users newuser = _userRepository.GetUserFromId(currUser.Id);
                 ViewBag.User = newuser;
                 return View();

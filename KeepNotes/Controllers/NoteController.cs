@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using KeepNotes.Controllers;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using CollegeApp.Modals;
 
 namespace KeepNotes.Controllers
 {
@@ -65,6 +64,7 @@ namespace KeepNotes.Controllers
         public IActionResult Index()
         {
             IEnumerable<Note> notes = _noteRepository.GetAllNotes(HomeController.currUser.Id);
+            
             ViewBag.notes = notes;
             IEnumerable<Category> categories = _categoryRepository.GetAllCategories(HomeController.currUser.Id);
             ViewBag.categories = categories;
@@ -86,9 +86,14 @@ namespace KeepNotes.Controllers
             {            
                 note.UserId = HomeController.currUser.Id;
                 Note newNote = _noteRepository.Add(note);
-
-                List<string> mailsToShare = ExtractEmails(note.ShareMails);
-                if(mailsToShare.Count > 0)
+                List<string> mailsToShare = new List<string>();
+                int flagcheck = 0;
+                if (note.ShareMails != null)
+                {
+                    mailsToShare = ExtractEmails(note.ShareMails);
+                    flagcheck = 1;
+                }
+                if(mailsToShare.Count > 0 && flagcheck!=0)
                 {
                     foreach(string mail in mailsToShare)
                     {
@@ -123,24 +128,86 @@ namespace KeepNotes.Controllers
         public IActionResult Edit(int id)
         {
             Note note = _noteRepository.GetNote(id);
+            
             ViewBag.note = note;
             currSelectedNote = note;
             IEnumerable<Category> categories = _categoryRepository.GetAllCategories(HomeController.currUser.Id);
             ViewBag.categories = categories;
             ViewData["CategoryId"] = new SelectList(categories, "CategoryId", "Name",note.CategoryId);
+            int userid = Int32.Parse( note.UserId.ToString());
+            IEnumerable<Share> share = _shareRepository.GetAllShares(id, userid);
+            List<string> sharedusername = new List<string>();
+            List<int> shareduserid = new List<int>();
+            foreach (var shareid in share)
+            {
+                Users user = _userRepository.GetUserFromId(Int32.Parse(shareid.ToShareUserId.ToString()));
+                sharedusername.Add(user.Username);
+                shareduserid.Add(user.Id);
+            }
+            ViewBag.shareusers = sharedusername;
+            ViewBag.shareuserid = shareduserid;
+            ViewBag.share = share;
             return View(note);
         }
         [HttpPost]
-        public IActionResult Edit(Note note)
+        public IActionResult Edit(Note note,string[] shareduserid,string sharenote)
         {
             if (ModelState.IsValid)
             {
-                    note.UserId = currSelectedNote.UserId;
-                    note.NoteId = currSelectedNote.NoteId;
-                    Note newNote = _noteRepository.Update(note);
-                    //currUser = newuser;
-                    return RedirectToAction("Index");
+                note.UserId = currSelectedNote.UserId;
+                
+                note.NoteId = currSelectedNote.NoteId;
+                for (int i=0;i<shareduserid.Length;i++)
+                {
+                    _shareRepository.Delete($"delete from dbo.share where UserId = {note.UserId} and NoteId = {(int)note.NoteId} and ToShareUserId = {shareduserid[i]}");
+                }
+
+                Note newNote = _noteRepository.Update(note);
+                List<string> mailsToShare = new List<string>();
+                if (note.ShareMails!=null)
+                {
+                    mailsToShare = ExtractEmails(note.ShareMails);
+                }
+                IEnumerable<Share> sharednotes = _shareRepository.GetAllShares(note.NoteId,(int)note.UserId);
+                Users dummyuser = _userRepository.GetUserOnlyEmail(note.ShareMails);
+
+                int emailexists = 0;
+                foreach (Share share in sharednotes)
+                {
+                    if(share.ToShareUserId == dummyuser.Id)
+                    {
+                        emailexists = 1;
+                    }
+                }
+                if (mailsToShare.Count > 0 && emailexists == 0)
+                {
+                    foreach (string mail in mailsToShare)
+                    {
+                        Users shareUser = _userRepository.GetUserOnlyEmail(mail);
+
+                        if (shareUser != null)
+                        {
+                            //Share share = new Share();
+                            //share.isWritable = note.isWritable;
+                            //share.UserId = (int)note.UserId;
+                            //share.NoteId = note.NoteId;
+                            //share.ToShareUserId = shareUser.Id;
+                            //_shareRepository.Add(share);
+                            int isWritable = 0;
+                            if (note.isWritable)
+                            {
+                                isWritable = 1;
+                            }
+
+                            _shareRepository.Add($"insert into dbo.Share (UserId,NoteId,isWritable,ToShareUserId) values ({note.UserId},{note.NoteId},{isWritable},{shareUser.Id})");
+                        }
+
+                    }
+                }
+                //currUser = newuser;
+                return RedirectToAction("Index");
             }
+            
             return View();
         }
 
@@ -152,3 +219,4 @@ namespace KeepNotes.Controllers
         }
     }
 }
+
