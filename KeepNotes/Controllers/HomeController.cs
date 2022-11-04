@@ -11,7 +11,8 @@ namespace KeepNotes.Controllers
     public class HomeController : Controller
     {
         private readonly IUserRepository _userRepository;
-        private static Users currUser;
+        public static Users currUser;
+
         private static bool isLogout=false;
         public HomeController(IUserRepository userRepository)
         {
@@ -121,7 +122,7 @@ namespace KeepNotes.Controllers
             }
             return View();
         }
-        [HttpGet]
+       [HttpGet]
         public IActionResult Home()
         {
             if (!isLogout)

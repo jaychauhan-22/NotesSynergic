@@ -29,6 +29,9 @@ namespace KeepNotes
             services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("NoteDbConnection")));
             services.AddControllersWithViews();
             services.AddScoped<IUserRepository,SQLUserRepository>();
+            services.AddScoped<ICategoryRepository, SQLCategoryRepository>();
+            services.AddScoped<INoteRepository, SQLNoteRepository>();
+            services.AddScoped<IShareRepository, SQLShareRepository>();
             services.AddRazorPages();
         }
 
