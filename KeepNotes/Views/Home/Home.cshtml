@@ -35,13 +35,21 @@
 <div class="container">
         <div class="card-deck">
     @foreach (var item in ViewBag.Notes) {
+            string category = "";
+            @foreach(var cat in ViewBag.Category)
+            {
+                if(cat.CategoryId == item.CategoryId)
+                {
+                    category = cat.Name;
+                }
+            }
             <div class="card border-primary my-2">
                 @*<div class="card-header">
                     @item.Title
                 </div>*@
                 <div class="card-body">
                     <h5 class="card-title">@item.Title</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Card Category</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">@category</h6>
                     <p class="card-text">@item.Text</p>
                 </div>
             </div>

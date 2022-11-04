@@ -13,14 +13,16 @@ namespace KeepNotes.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly INoteRepository _noteRepository;
+        private readonly ICategoryRepository _categoryRepository;
         public static Users currUser;
 
         private static bool isLogout=false;
         private static bool ispublic = false;
-        public HomeController(IUserRepository userRepository,INoteRepository noteRepository)
+        public HomeController(IUserRepository userRepository,INoteRepository noteRepository, ICategoryRepository categoryRepository)
         {
             _userRepository = userRepository;
             _noteRepository = noteRepository;
+            _categoryRepository = categoryRepository;
         }
 
         public IActionResult Index()
@@ -137,6 +139,7 @@ namespace KeepNotes.Controllers
                 if(ispublic==true)
                 {
                     IEnumerable<Note> notes  = _noteRepository.GetPublicNotes(currUser.Id);
+                    
                     ViewBag.Notes = notes;
                 }
                 else
@@ -144,6 +147,8 @@ namespace KeepNotes.Controllers
                     IEnumerable<Note> notes = _noteRepository.GetAllNotes(currUser.Id);
                     ViewBag.Notes = notes;
                 }
+                IEnumerable<Category> category = _categoryRepository.GetAllCategories(currUser.Id);
+                ViewBag.Category = category;
                 Users newuser = _userRepository.GetUserFromId(currUser.Id);
                 ViewBag.User = newuser;
                 return View();
