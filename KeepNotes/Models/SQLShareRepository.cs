@@ -52,6 +52,10 @@ namespace KeepNotes.Models
         {
             return context.Share.Where(s => s.UserId == uid && s.NoteId == noteId).ToList();
         }
+        public IEnumerable<Share> GetAllSharedNotes(int uid)
+        {
+            return context.Share.Where(s => s.ToShareUserId == uid).ToList();
+        }
         public IEnumerable<Share> CheckShareIdExists(int noteId, int uid,int suid)
         {
             return context.Share.Where(s => s.UserId == uid && s.NoteId == noteId && s.ToShareUserId==suid).ToList();

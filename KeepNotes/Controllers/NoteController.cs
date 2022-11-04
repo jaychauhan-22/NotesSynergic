@@ -70,7 +70,23 @@ namespace KeepNotes.Controllers
             ViewBag.categories = categories;
             return View();
         }
-
+        public IActionResult SharedNotes()
+        {
+            IEnumerable<Share> share = _shareRepository.GetAllSharedNotes(HomeController.currUser.Id);
+            List<Note> notes = new List<Note>();
+            List<Category> notes_category = new List<Category>();
+            foreach (Share s in share)
+            {
+                Note note = _noteRepository.GetNote((int)s.NoteId);
+                Category category= _categoryRepository.GetCategory((int)note.CategoryId,(int)s.UserId);
+                notes.Add(note);
+                notes_category.Add(category);
+            }
+            ViewBag.share = share;
+            ViewBag.note = notes;
+            ViewBag.categories = notes_category;
+            return View();
+        }
         [HttpGet]
         public IActionResult Create()
         {

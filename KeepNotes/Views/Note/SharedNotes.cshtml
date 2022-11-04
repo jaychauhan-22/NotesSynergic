@@ -1,0 +1,50 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Create";
+}
+<h1>Shared Notes</h1>
+<h4>By Different Users:</h4>
+<hr />
+<div class="container">
+        <div class="card-deck">
+        @foreach (var item in ViewBag.note)
+        {
+            string category = "";
+            @foreach (var cat in ViewBag.categories)
+            {
+                if (cat.CategoryId == item.CategoryId)
+                {
+                    category = cat.Name;
+                }
+            }
+                <div class="card border-primary my-2">
+                @*<div class="card-header">
+                    @item.Title
+                </div>*@
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">@category</h6>
+                        <p class="card-text">@item.Text</p>
+                    @foreach (var share in ViewBag.share)
+                    {
+                        if (share.NoteId == item.NoteId && share.isWritable == true)
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.NoteId">Edit</a>
+                        }
+                    }
+                    
+                </div>
+                </div>
+
+        }
+           </div>
+    @*
+    <label>@user.Id</label>
+    <label>@user.Username</label>
+    <label>@user.Email</label>
+    <label>@user.Contact</label>*@
+    <div>
+    </div>
+</div>
