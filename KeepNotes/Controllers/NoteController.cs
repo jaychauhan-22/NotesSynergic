@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using KeepNotes.Controllers;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace KeepNotes.Controllers
 {
@@ -58,6 +59,11 @@ namespace KeepNotes.Controllers
             _categoryRepository = categoryRepository;
             _shareRepository = shareRepository;
             _userRepository = userRepository;
+        }
+
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            ViewBag.User = HomeController.currUser;
         }
 
         [HttpGet]

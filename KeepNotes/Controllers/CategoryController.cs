@@ -8,6 +8,7 @@ using System.Security.Principal;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using KeepNotes.Controllers;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace KeepNotes.Controllers
 {
@@ -21,6 +22,11 @@ namespace KeepNotes.Controllers
             _categoryRepository = categoryRepository;
         }
 
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            ViewBag.User = HomeController.currUser;
+        }
+
         [HttpGet]
         public IActionResult Index()
         {
@@ -31,7 +37,7 @@ namespace KeepNotes.Controllers
 
         [HttpGet]
         public IActionResult Create()
-        { 
+        {
             return View();
         }
         [HttpPost]
