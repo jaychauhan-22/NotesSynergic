@@ -1,17 +1,17 @@
 ﻿@model IEnumerable<KeepNotes.Models.Note>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Keep Notes | Notes-Index";
 }
-<div class="col-auto my-4">
-    <div class="col-4">
+<div class="col-auto m-4">
+<div class="text-center">
 <h1>Index</h1>
-
-<p>
+<p class="h3">
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
+    </div>
+        <table class="table table-borderless container table-hover">
+    <thead class="thead-dark">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Title)
@@ -54,5 +54,4 @@
 }
     </tbody>
 </table>
-</div>
 </div>

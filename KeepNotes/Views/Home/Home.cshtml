@@ -3,6 +3,11 @@
     ViewData["Title"] = "Keep Notes | Home";
     var user = ViewBag.User;
 }
+<style>
+    body {
+        background-image: linear-gradient(to right,#B2FEFA,#0ED2F7);
+    }
+</style>
 <center><h1>All Notes</h1></center>
 
 <div class="container">
@@ -16,7 +21,7 @@
                     category = cat.Name;
                 }
             }
-            <div class="card border-primary my-2">
+            <div class="card border-success my-2">
                 @*<div class="card-header">
                     @item.Title
                 </div>*@

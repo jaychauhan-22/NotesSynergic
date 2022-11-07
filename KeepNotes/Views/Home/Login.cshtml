@@ -4,6 +4,11 @@
 }
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<style>
+    body{
+        background-image: linear-gradient(to right,#ffff1c,#00c3ff);
+    }
+</style>
 <body>
     <main>
         <div class="col-auto my-4">
@@ -14,7 +19,7 @@
                     <input asp-for="Email" class="form-control" />
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
-                <div class="form-group">-
+                <div class="form-group">
                     <label asp-for="Password" class="control-label">Enter Valid Password</label>
                     <input asp-for="Password" class="form-control" />
                 </div>
