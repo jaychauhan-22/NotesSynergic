@@ -1,6 +1,7 @@
 ﻿using KeepNotes.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
@@ -16,13 +17,21 @@ namespace KeepNotes.Controllers
         private readonly ICategoryRepository _categoryRepository;
         public static Users currUser;
 
-        private static bool isLogout=false;
-        private static bool ispublic = false;
+        public static bool isLogout=false;
+        public static bool ispublic = false;
         public HomeController(IUserRepository userRepository,INoteRepository noteRepository, ICategoryRepository categoryRepository)
         {
             _userRepository = userRepository;
             _noteRepository = noteRepository;
             _categoryRepository = categoryRepository;
+        }
+
+
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            ViewBag.User = HomeController.currUser;
+            ViewBag.isPublic = ispublic;
+            ViewBag.isLogout = isLogout;
         }
 
         public IActionResult Index()
@@ -51,7 +60,7 @@ namespace KeepNotes.Controllers
                         {
                             ViewBag.User = validateuser;
                             currUser = validateuser;
-                            ispublic=true;
+                            
                             return RedirectToAction("Home");
                         }
                         else
@@ -67,6 +76,7 @@ namespace KeepNotes.Controllers
                         {
                             ViewBag.User = validateuser;
                             currUser = validateuser;
+                            ispublic = true;
                             return RedirectToAction("Home");
                         }
                         else
@@ -159,6 +169,7 @@ namespace KeepNotes.Controllers
         public IActionResult Logout()
         {
             isLogout = true;
+            currUser = null;
             return RedirectToAction("Index");
         }
     }

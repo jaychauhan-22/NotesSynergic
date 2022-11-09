@@ -64,6 +64,8 @@ namespace KeepNotes.Controllers
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             ViewBag.User = HomeController.currUser;
+            ViewBag.isPublic = HomeController.ispublic;
+            ViewBag.isLogout = HomeController.isLogout;
         }
 
         [HttpGet]
