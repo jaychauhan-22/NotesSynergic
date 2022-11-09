@@ -198,7 +198,7 @@ namespace KeepNotes.Controllers
                 int emailexists = 0;
                 foreach (Share share in sharednotes)
                 {
-                    if(share.ToShareUserId == dummyuser.Id)
+                    if(dummyuser != null && share.ToShareUserId == dummyuser.Id)
                     {
                         emailexists = 1;
                     }
